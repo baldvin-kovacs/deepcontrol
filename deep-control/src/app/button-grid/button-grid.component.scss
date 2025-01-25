@@ -9,6 +9,9 @@ app-dial-button, app-marker {
 }
 
 app-marker {
-  transition: transform 0.3s ease;
-  animation-direction: reverse;
+  position: absolute;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  transition: top 0.3s ease, left 0.3s ease;
+  pointer-events: none;
 }

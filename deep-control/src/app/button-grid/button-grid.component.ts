@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { PadModel, Coords, AnimatedCoords, DirectionPadValue, DialPadValue } from '../pad-model';
+import { PadModel, Coords, DirectionPadValue, DialPadValue } from '../pad-model';
 import { DialButtonComponent } from '../dial-button/dial-button.component';
 import { MarkerComponent } from '../marker/marker.component';
 import { DeepControlModelService } from '../deep-control-model.service';
@@ -26,9 +26,7 @@ export class ButtonGridComponent {
   @Input() isLast!: boolean;
   @Input() padIdx!: number;
 
-  constructor(private readonly dcms: DeepControlModelService) {
-
-  }
+  constructor(private readonly dcms: DeepControlModelService) {}
 
   dials: Dial[] = [];
   cols!: number;
@@ -53,7 +51,7 @@ export class ButtonGridComponent {
       }
     }
     this.markerStyle$ = this.padModel.coords$.pipe(
-      map((animatedCoords) => computeMarkerStyle(this.padIdx, animatedCoords))
+      map((pos) => computeMarkerStyle(this.padIdx, pos))
     );
   }
 
@@ -63,23 +61,15 @@ export class ButtonGridComponent {
   }
 }
 
-function computeMarkerStyle(padIdx: number, ac: AnimatedCoords): Map<string, string> {
-  const previousPos = ac.previous;
-  const pos = ac.current;
+function computeMarkerStyle(padIdx: number, pos: Coords): Map<string, string> {
+  const cellSize = 84;
+  const top = (pos[0] - 1) * cellSize;
+  const left = (pos[1] - 1) * cellSize;
 
   const styleElements: [string, string][] = [
-    ['grid-row-start', `${pos[0]}`],
-    ['grid-row-end:', `${pos[0]}`],
-    ['grid-column-start', `${pos[1]}`],
-    ['grid-column-end', `${pos[1]}`],
+    ['top', `${top}px`],
+    ['left', `${left}px`],
   ];
-
-  if ((pos[0] !== previousPos[0]) || (pos[1] !== previousPos[1])) {
-    const cellSize = 84.0;
-    const dx = Math.floor((pos[1] - previousPos[1]) * cellSize);
-    const dy = Math.floor((pos[0] - previousPos[0]) * cellSize);
-    styleElements.push(['transform', `translate(${dx}px, ${dy}px)`]);
-  }
 
   console.log("styleElements", padIdx, styleElements);
 

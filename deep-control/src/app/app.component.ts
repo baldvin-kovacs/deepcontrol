@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { RouterOutlet } from '@angular/router';
-import { DeepControlModelService } from './deep-control-model.service';
 import { Observable } from 'rxjs';
 
-import {ButtonGridComponent} from './button-grid/button-grid.component';
+import { ButtonGridComponent } from './button-grid/button-grid.component';
 import { PadModel } from './pad-model';
+import { DeepControlModelService } from './deep-control-model.service';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +16,11 @@ import { PadModel } from './pad-model';
 export class AppComponent {
   title = 'deep-control';
 
-  model$: Observable<PadModel[]>;
+  readonly model$: Observable<PadModel[]>;
+  readonly code$!: Observable<string>;
 
   constructor(private readonly dcms: DeepControlModelService) {
     this.model$ = dcms.model$;
+    this.code$ = dcms.code$;
   }
 }

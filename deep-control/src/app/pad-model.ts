@@ -11,30 +11,18 @@ export enum DirectionPadValue {
 
 export type Coords = [number, number];
 
-export interface AnimatedCoords {
-  previous: Coords;
-  current: Coords;
-};
-
-function newStableCoords(v: Coords): AnimatedCoords {
-  return {
-    previous: [...v],
-    current: [...v],
-  };
-}
-
 export interface Controllable {
   control(dpv: DirectionPadValue): void;
-  coords$: Observable<AnimatedCoords>;
+  coords$: Observable<Coords>;
   isValidPos(cs: Coords): boolean;
 }
 
 abstract class PadModelBase implements Controllable {
-  protected cs = new BehaviorSubject<AnimatedCoords>(newStableCoords([0, 0]));
+  protected cs = new BehaviorSubject<Coords>([0, 0]);
   coords$ = this.cs.asObservable();
 
   private computeNewPos(dpv: DirectionPadValue): Coords {
-    const pos: Coords = [...this.cs.value.current];
+    const pos: Coords = [...this.cs.value];
     switch (dpv) {
       case DirectionPadValue.Up: pos[0]--; break;
       case DirectionPadValue.Left: pos[1]--; break;
@@ -49,10 +37,7 @@ abstract class PadModelBase implements Controllable {
     if (!this.isValidPos(pos)) {
       return;
     }
-    this.cs.next({
-      previous: this.cs.value.current,
-      current: pos,
-    });
+    this.cs.next(pos);
   }
 
   isApplicableMove(dpv: DirectionPadValue): boolean {
@@ -74,16 +59,16 @@ export class DialPadModel extends PadModelBase {
   set(v: DialPadValue): void {
     switch (v) {
       case 'A':
-        this.cs.next(newStableCoords([4, 3]));
+        this.cs.next([4, 3]);
         break;
       case 0:
-        this.cs.next(newStableCoords([4, 2]));
+        this.cs.next([4, 2]);
         break;
       default:
         if (v < 1 || v > 9) {
           return;
         }
-        this.cs.next(newStableCoords([3 - Math.trunc((v - 1) / 3), (v - 1) % 3 + 1]));
+        this.cs.next([3 - Math.trunc((v - 1) / 3), (v - 1) % 3 + 1]);
         break;
     }
   }
@@ -102,6 +87,10 @@ export class DialPadModel extends PadModelBase {
       return undefined;
     }
     return 3 * (3 - row) + col;
+  }
+
+  get(): DialPadValue | undefined {
+    return this.valueAt(this.cs.value);
   }
 
   charAt(cs: Coords): string | undefined {
@@ -129,11 +118,11 @@ export class DirectionPadModel extends PadModelBase {
 
   set(v: DirectionPadValue): void {
     switch (v) {
-      case DirectionPadValue.Up: this.cs.next(newStableCoords([1, 2])); break;;
-      case DirectionPadValue.Left: this.cs.next(newStableCoords([2, 1])); break;;
-      case DirectionPadValue.Down: this.cs.next(newStableCoords([2, 2])); break;;
-      case DirectionPadValue.Right: this.cs.next(newStableCoords([2, 3])); break;;
-      case DirectionPadValue.Apply: this.cs.next(newStableCoords([1, 3])); break;;
+      case DirectionPadValue.Up: this.cs.next([1, 2]); break;;
+      case DirectionPadValue.Left: this.cs.next([2, 1]); break;;
+      case DirectionPadValue.Down: this.cs.next([2, 2]); break;;
+      case DirectionPadValue.Right: this.cs.next([2, 3]); break;;
+      case DirectionPadValue.Apply: this.cs.next([1, 3]); break;;
     }
   }
 
@@ -168,6 +157,10 @@ export class DirectionPadModel extends PadModelBase {
       case DirectionPadValue.Apply: return 'A';
     }
     return undefined;
+  }
+
+  get(): DirectionPadValue | undefined {
+    return this.valueAt(this.cs.value);
   }
 
   override isValidPos(cs: Coords): boolean {

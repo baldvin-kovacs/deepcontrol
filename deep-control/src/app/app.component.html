@@ -1,3 +1,6 @@
+<h1>
+Code: {{code$ | async}}
+</h1>
 <div class="container">
   @for (model of model$ | async; track $index) {
   <app-button-grid [padModel]="model" [isLast]="$last" [padIdx]="$index"></app-button-grid>

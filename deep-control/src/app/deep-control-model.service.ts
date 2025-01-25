@@ -12,7 +12,7 @@ import {
 export class DeepControlModelService {
   constructor(private route: ActivatedRoute) { }
 
-  model = new BehaviorSubject<PadModel[]>([
+  private model = new BehaviorSubject<PadModel[]>([
     new DialPadModel(6),
     new DirectionPadModel(DirectionPadValue.Up),
     new DirectionPadModel(DirectionPadValue.Left),
@@ -21,14 +21,38 @@ export class DeepControlModelService {
 
   model$ = this.model.asObservable();
 
+  private code = new BehaviorSubject<string>('');
+  code$ = this.code.asObservable();
+
+  private applyDialpad(): void {
+    const c = this.model.value[0].get() as DialPadValue;
+    if (c === undefined || c === 'A') {
+      return;
+    }
+    this.code.next(this.code.value + c);
+  }
+
   control(idx: number, button: DirectionPadValue | DialPadValue | undefined): void {
-    if (idx === 0 || button === undefined) {
+    if (button === undefined) {
+      return;
+    }
+    if (idx === 0) {
+      this.applyDialpad();
       return;
     }
     // We know that only the first one is a dialpad.
-    const dpv: DirectionPadValue = button as DirectionPadValue;
-    if (dpv === DirectionPadValue.Apply) {
-      return;
+    let dpv: DirectionPadValue = button as DirectionPadValue;
+
+    while (idx > 0 && dpv === DirectionPadValue.Apply) {
+      idx--;
+      if (idx === 0) {
+        this.applyDialpad();
+        return;
+      }
+      dpv = this.model.value[idx].get() as DirectionPadValue;
+      if (dpv === undefined) {
+        return;
+      }
     }
 
     this.model.value[idx-1].control(dpv);
