@@ -2,7 +2,7 @@
 Code: {{code$ | async}}
 </h1>
 <div class="container">
-  @for (model of model$ | async; track $index) {
+  @for (model of model$ | async; track alwaysNew()) {
   <app-button-grid [padModel]="model" [isLast]="$last" [padIdx]="$index"></app-button-grid>
   }
 </div>

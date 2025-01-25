@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common'
-import { RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ButtonGridComponent } from './button-grid/button-grid.component';
@@ -12,10 +11,9 @@ import { DeepControlModelService } from './deep-control-model.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   imports: [CommonModule, ButtonGridComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  title = 'deep-control';
-
   readonly model$: Observable<PadModel[]>;
   readonly code$!: Observable<string>;
 
@@ -23,4 +21,11 @@ export class AppComponent {
     this.model$ = dcms.model$;
     this.code$ = dcms.code$;
   }
+
+  private alwaysNewCounter = 0;
+  alwaysNew(): number {
+    this.alwaysNewCounter++;
+    return this.alwaysNewCounter;
+  }
+
 }

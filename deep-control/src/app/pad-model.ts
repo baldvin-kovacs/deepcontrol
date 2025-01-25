@@ -89,12 +89,16 @@ export class DialPadModel extends PadModelBase {
     return 3 * (3 - row) + col;
   }
 
+  charAt(cs: Coords): string | undefined {
+    return this.valueAt(cs)?.toString();
+  }
+
   get(): DialPadValue | undefined {
     return this.valueAt(this.cs.value);
   }
 
-  charAt(cs: Coords): string | undefined {
-    return this.valueAt(cs)?.toString();
+  char(): string | undefined {
+    return this.charAt(this.cs.value);
   }
 
   override isValidPos(cs: Coords): boolean {
@@ -161,6 +165,10 @@ export class DirectionPadModel extends PadModelBase {
 
   get(): DirectionPadValue | undefined {
     return this.valueAt(this.cs.value);
+  }
+
+  char(): string | undefined {
+    return this.charAt(this.cs.value);
   }
 
   override isValidPos(cs: Coords): boolean {
