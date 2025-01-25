@@ -1,0 +1,14 @@
+.pad {
+  display: inline-grid;
+  position: relative;
+  background-color: #f2edd4ff;
+}
+
+app-dial-button, app-marker {
+  margin: 8px;
+}
+
+app-marker {
+  transition: transform 0.3s ease;
+  animation-direction: reverse;
+}
