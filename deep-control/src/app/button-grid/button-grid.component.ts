@@ -56,7 +56,6 @@ export class ButtonGridComponent {
   }
 
   initiateControl(button: DirectionPadValue | DialPadValue | undefined): void {
-    console.log('initiating control: ', button);
     this.dcms.control(this.padIdx, button);
   }
 }
@@ -70,8 +69,6 @@ function computeMarkerStyle(padIdx: number, pos: Coords): Map<string, string> {
     ['top', `${top}px`],
     ['left', `${left}px`],
   ];
-
-  console.log("styleElements", padIdx, styleElements);
 
   return new Map<string, string>(styleElements);
 }

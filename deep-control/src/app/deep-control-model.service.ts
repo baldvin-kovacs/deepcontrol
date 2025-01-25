@@ -23,12 +23,11 @@ export class DeepControlModelService {
   private code = new BehaviorSubject<string>('');
   code$ = this.code.asObservable();
 
-  private applyDialpad(): void {
-    const c = this.model.value[0].get() as DialPadValue;
-    if (c === undefined || c === 'A') {
+  private applyDialpad(v: DialPadValue | undefined): void {
+    if (v === undefined || v === 'A') {
       return;
     }
-    this.code.next(this.code.value + c);
+    this.code.next(this.code.value + v);
     this.setFragment();
   }
 
@@ -37,7 +36,7 @@ export class DeepControlModelService {
       return;
     }
     if (idx === 0) {
-      this.applyDialpad();
+      this.applyDialpad(button as (DialPadValue | undefined));
       return;
     }
     // We know that only the first one is a dialpad.
@@ -46,7 +45,7 @@ export class DeepControlModelService {
     while (idx > 0 && dpv === DirectionPadValue.Apply) {
       idx--;
       if (idx === 0) {
-        this.applyDialpad();
+        this.applyDialpad(this.model.value[0].get() as (DialPadValue | undefined));
         return;
       }
       dpv = this.model.value[idx].get() as DirectionPadValue;
@@ -60,15 +59,13 @@ export class DeepControlModelService {
   }
 
   applyFragment(fragment: string | null): void {
-    console.log("new incoming fragment", fragment);
     if (fragment === null) {
       this.startFromScratch();
       return;
     }
     const parts = fragment.split(';');
     if (parts.length > 0) {
-      console.log('calling newmodel with', parts[0]);
-      this.newModel(parts[0]);
+      this.newModel(parts[0].toUpperCase());
     }
     if (parts.length > 1) {
       this.newCode(parts[1]);
@@ -86,7 +83,6 @@ export class DeepControlModelService {
 
   newModel(s: string): void {
     if (s === this.currentModelChars()) {
-      console.log("No need to renew the model");
       return;
     }
     if (s.length === 0) {
@@ -116,7 +112,6 @@ export class DeepControlModelService {
       nm.push(new DirectionPadModel(directionPadValue));
     }
     nm.push(new DirectionPadModel(DirectionPadValue.Apply));
-    console.log("pushing", nm);
     this.model.next(nm);
   }
 
@@ -144,7 +139,6 @@ export class DeepControlModelService {
       }
       chars.push(c);
     }
-    console.log("current code: ", chars.join(''));
     return chars.join('');
   }
 
