@@ -73,7 +73,7 @@ export class DeepControlModelService {
   }
 
   startFromScratch(): void {
-    this.model.next([
+    this.adjustModel([
       new DialPadModel(6),
       new DirectionPadModel(DirectionPadValue.Up),
       new DirectionPadModel(DirectionPadValue.Left),
@@ -112,7 +112,22 @@ export class DeepControlModelService {
       nm.push(new DirectionPadModel(directionPadValue));
     }
     nm.push(new DirectionPadModel(DirectionPadValue.Apply));
-    this.model.next(nm);
+    this.adjustModel(nm);
+  }
+
+  // This is trying to reuse some from the previous, to keep Angular
+  // happy. Without this, the "@for (model of model$ | async; track model) {...}"
+  // complains that it needs to re-create everything.
+  adjustModel(nm: PadModel[]) {
+    const om = this.model.value;
+    if (nm.length === om.length) {
+      for (let i = 0; i < nm.length; ++i) {
+        if (nm[i].get() === om[i].get()) {
+          nm[i] = om[i];
+        }
+      }
+    }
+    this.model.next(nm)
   }
 
   newCode(s: string): void {

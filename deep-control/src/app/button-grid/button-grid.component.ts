@@ -55,7 +55,7 @@ export class ButtonGridComponent {
     );
   }
 
-  initiateControl(button: DirectionPadValue | DialPadValue | undefined): void {
+  control(button: DirectionPadValue | DialPadValue | undefined): void {
     this.dcms.control(this.padIdx, button);
   }
 }

@@ -21,11 +21,4 @@ export class AppComponent {
     this.model$ = dcms.model$;
     this.code$ = dcms.code$;
   }
-
-  private alwaysNewCounter = 0;
-  alwaysNew(): number {
-    this.alwaysNewCounter++;
-    return this.alwaysNewCounter;
-  }
-
 }

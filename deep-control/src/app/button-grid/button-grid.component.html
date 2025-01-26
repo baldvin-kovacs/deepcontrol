@@ -7,7 +7,7 @@
   }
   @for (dial of dials; track $index) {
   <app-dial-button [val]="dial.char"
-  (click)="initiateControl(dial.val)"
+  (click)="control(dial.val)"
   [ngStyle]="{
     'grid-row-start': dial.pos[0],
     'grid-row-end:': dial.pos[0],
