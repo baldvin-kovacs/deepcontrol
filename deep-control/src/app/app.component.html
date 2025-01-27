@@ -3,6 +3,6 @@ Code: {{code$ | async}}
 </h1>
 <div class="container">
   @for (model of model$ | async; track model) {
-  <app-button-grid [padModel]="model" [isLast]="$last" [padIdx]="$index"></app-button-grid>
+  <app-button-grid [padModel]="model" [isLast]="$last" [padIdx]="$index" [padColor]="colors[$index % colors.length]" [markerColor]="colors[($index + 1) % colors.length]"></app-button-grid>
   }
 </div>

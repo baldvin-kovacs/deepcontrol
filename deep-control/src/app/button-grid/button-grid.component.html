@@ -1,9 +1,10 @@
 <div class="pad" [ngStyle]="{
   'grid-template-columns': 'repeat('+cols+', 1fr)',
   'grid-template-rows': 'repeat('+rows+', 1fr)',
+  'background-color': 'hsl('+ padColor + ', 90%)'
   }">
   @if (!isLast) {
-    <app-marker [ngStyle]="markerStyle$ | async"></app-marker>
+    <app-marker [ngStyle]="markerStyle$ | async" [color]="markerColor"></app-marker>
   }
   @for (dial of dials; track $index) {
   <app-dial-button [val]="dial.char"

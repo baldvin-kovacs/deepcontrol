@@ -4,7 +4,9 @@
 }
 
 .marker {
-  border: 4px solid #0000;
-  width: 60px;
-  height: 60px;
+  border-radius: 50%;
+  margin: 4.5px;
+  width: 58px;
+  height: 58px;
+  user-select: none;
 }

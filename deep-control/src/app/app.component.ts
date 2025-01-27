@@ -16,6 +16,12 @@ import { DeepControlModelService } from './deep-control-model.service';
 export class AppComponent {
   readonly model$: Observable<PadModel[]>;
   readonly code$!: Observable<string>;
+  readonly colors = [
+    '50, 54%',
+    '225, 74%',
+    '30, 74%',
+    '100, 54%',
+  ];
 
   constructor(private readonly dcms: DeepControlModelService) {
     this.model$ = dcms.model$;

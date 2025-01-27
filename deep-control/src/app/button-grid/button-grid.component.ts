@@ -25,6 +25,8 @@ export class ButtonGridComponent {
   @Input() padModel!: PadModel;
   @Input() isLast!: boolean;
   @Input() padIdx!: number;
+  @Input() padColor!: string;
+  @Input() markerColor!: string;
 
   constructor(private readonly dcms: DeepControlModelService) {}
 
@@ -56,6 +58,8 @@ export class ButtonGridComponent {
   }
 
   control(button: DirectionPadValue | DialPadValue | undefined): void {
+    if (!this.isLast)
+      return;
     this.dcms.control(this.padIdx, button);
   }
 }
