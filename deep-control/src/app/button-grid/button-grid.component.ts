@@ -56,6 +56,8 @@ export class ButtonGridComponent {
   }
 
   control(button: DirectionPadValue | DialPadValue | undefined): void {
+    if (!this.isLast)
+      return;
     this.dcms.control(this.padIdx, button);
   }
 }
