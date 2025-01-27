@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "publish": "ng build --base-href=/deepcontrol/app/ && rsync -av dist/deep-control/browser/ ../docs/app/"
+    "publish": "ng build --base-href=/deepcontrol/app/ && rsync -av --del dist/deep-control/browser/ ../docs/app/"
   },
   "private": true,
   "dependencies": {
