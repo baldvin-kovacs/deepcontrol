@@ -25,6 +25,8 @@ export class ButtonGridComponent {
   @Input() padModel!: PadModel;
   @Input() isLast!: boolean;
   @Input() padIdx!: number;
+  @Input() padColor!: string;
+  @Input() markerColor!: string;
 
   constructor(private readonly dcms: DeepControlModelService) {}
 
